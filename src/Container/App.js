@@ -19,7 +19,7 @@ class App extends React.Component {
       ImageURL: "",
       Data: "",
       box: "",
-      route: "signup",
+      route: "home",
       isLoggedin: false,
     };
   }
