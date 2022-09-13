@@ -19,12 +19,36 @@ class App extends React.Component {
       ImageURL: "",
       Data: "",
       box: "",
-      route: "home",
+      route: "signin",
       isLoggedin: false,
+      user: {
+        id: "",
+        name: "",
+        email: "",
+        entries: 0,
+        joined: new Date(),
+      },
     };
   }
   ImageDetector = (evt) => {
     this.setState({ Data: evt.target.value });
+  };
+  loadUser = (data) => {
+    console.log("loaduser:", data);
+    this.setState(
+      {
+        user: {
+          id: data.id,
+          name: data.name,
+          email: data.email,
+          entries: data.entries,
+          joined: data.joined,
+        },
+      },
+      () => {
+        console.log("state updated");
+      }
+    );
   };
   submitted = async () => {
     this.setState({ ImageURL: this.state.Data }, async () => {
@@ -53,9 +77,22 @@ class App extends React.Component {
           }),
         }
       );
-      let val = await rawdata
-        .json()
-        .then((res) => this.displayfacebox(this.facebox(res)));
+      let val = await rawdata.json().then((res) => {
+        this.displayfacebox(this.facebox(res));
+      });
+      console.log("yet", this.state);
+      fetch("http://localhost:3001/image", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: this.state.user.id }),
+      })
+        .then((res) => res.json())
+        .then((resp) => {
+          console.log("dopnee", resp);
+          this.setState({
+            user: { ...this.state.user, entries: resp[0].entries },
+          });
+        });
     });
   };
   facebox = (info) => {
@@ -93,14 +130,14 @@ class App extends React.Component {
         />
         {this.state.route === "home" ? (
           <div>
-            <Identifier username="default" Rank="0" />
+            <Identifier info={this.state.user} />
             <ImageInput data={ImageDetector} submit={submitted} />
             <Output identifier={box} Image={ImageURL} />
           </div>
         ) : this.state.route === "signin" ? (
           <SignIn onRouteChange={onRouteChange} />
         ) : (
-          <SignUp onRouteChange={onRouteChange} />
+          <SignUp loadUser={this.loadUser} onRouteChange={onRouteChange} />
         )}
       </div>
     );
