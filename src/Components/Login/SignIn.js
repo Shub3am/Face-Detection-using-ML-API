@@ -12,7 +12,7 @@ class SignIn extends React.Component {
   };
 
   onSubmitSignIn = (evt) => {
-    fetch("http://localhost:3001/signin", {
+    fetch("https://lit-ridge-69049.herokuapp.com/signin", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -22,7 +22,7 @@ class SignIn extends React.Component {
     })
       .then((response) => response.json())
       .then((verify) => {
-        if (verify.length) {
+        if (verify.length && verify !== "Not Found") {
           this.props.loadUser(verify[0]);
           this.props.onRouteChange("home");
         } else {

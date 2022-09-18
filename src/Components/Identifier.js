@@ -2,7 +2,7 @@ import React from "react";
 
 function Ranks(props) {
   const { info } = props;
-  fetch(`http://localhost:3001/entries/${info.email}`)
+  fetch(`https://lit-ridge-69049.herokuapp.com/entries/${info.email}`)
     .then((raw) => raw.json())
     .then((data) => {
       info.entries = data[0].entries;

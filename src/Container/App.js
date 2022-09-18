@@ -7,11 +7,6 @@ import Output from "../Components/Output";
 import SignIn from "../Components/Login/SignIn";
 import SignUp from "../Components/Login/Register";
 
-const USER_ID = "shubhamv";
-const APP_ID = "116ff9b8510a4de4bb5aaffa487d6237";
-const MODEL_ID = "face-detection";
-const PAT = "504063f497e449b7b445dc7106ddab72";
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -52,34 +47,17 @@ class App extends React.Component {
   submitted = async () => {
     this.setState({ ImageURL: this.state.Data }, async () => {
       const rawdata = await fetch(
-        "https://api.clarifai.com/v2/models/" + MODEL_ID + "/outputs",
+        "https://lit-ridge-69049.herokuapp.com/imageDetect",
         {
           method: "POST",
-          headers: {
-            Accept: "application/json",
-            Authorization: "Key " + PAT,
-          },
-          body: JSON.stringify({
-            user_app_id: {
-              user_id: USER_ID,
-              app_id: APP_ID,
-            },
-            inputs: [
-              {
-                data: {
-                  image: {
-                    url: this.state.ImageURL,
-                  },
-                },
-              },
-            ],
-          }),
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ImageURL: this.state.ImageURL }),
         }
       );
       let val = await rawdata.json().then((res) => {
         this.displayfacebox(this.facebox(res));
       });
-      fetch("http://localhost:3001/image", {
+      fetch("https://lit-ridge-69049.herokuapp.com/image", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id: this.state.user.id }),

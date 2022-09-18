@@ -15,7 +15,7 @@ class SignUp extends React.Component {
     this.setState({ name: evt.target.value });
   };
   onRegisterChange = (evt) => {
-    fetch("http://localhost:3001/register", {
+    fetch("https://lit-ridge-69049.herokuapp.com/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
