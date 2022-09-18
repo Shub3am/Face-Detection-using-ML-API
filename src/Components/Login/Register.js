@@ -26,11 +26,9 @@ class SignUp extends React.Component {
     })
       .then((res) => res.json())
       .then((user) => {
-        console.log("User Registered");
         if (user) {
           const data = user[user.length - 1];
           this.props.loadUser(data);
-          console.log(this.props.loadUser);
           this.props.onRouteChange("home");
         }
       });

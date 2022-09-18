@@ -34,7 +34,6 @@ class App extends React.Component {
     this.setState({ Data: evt.target.value });
   };
   loadUser = (data) => {
-    console.log("loaduser:", data);
     this.setState(
       {
         user: {
@@ -80,7 +79,6 @@ class App extends React.Component {
       let val = await rawdata.json().then((res) => {
         this.displayfacebox(this.facebox(res));
       });
-      console.log("yet", this.state);
       fetch("http://localhost:3001/image", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -88,7 +86,6 @@ class App extends React.Component {
       })
         .then((res) => res.json())
         .then((resp) => {
-          console.log("dopnee", resp);
           this.setState({
             user: { ...this.state.user, entries: resp[0].entries },
           });
@@ -135,7 +132,7 @@ class App extends React.Component {
             <Output identifier={box} Image={ImageURL} />
           </div>
         ) : this.state.route === "signin" ? (
-          <SignIn onRouteChange={onRouteChange} />
+          <SignIn onRouteChange={onRouteChange} loadUser={this.loadUser} />
         ) : (
           <SignUp loadUser={this.loadUser} onRouteChange={onRouteChange} />
         )}

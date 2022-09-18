@@ -22,13 +22,13 @@ class SignIn extends React.Component {
     })
       .then((response) => response.json())
       .then((verify) => {
-        if (verify == "Logged In") {
-          this.props.onRouteChange("home", this.state);
+        if (verify.length) {
+          this.props.loadUser(verify[0]);
+          this.props.onRouteChange("home");
         } else {
-          console.log("Wrong Password");
+          alert("Wrong Password");
         }
       });
-    console.log(this.state);
     evt.preventDefault();
   };
   render() {
